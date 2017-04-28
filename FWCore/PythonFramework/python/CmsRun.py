@@ -21,7 +21,6 @@ class CmsRun(object):
     return self._cppProcessor.totalEventsFailed()
 
 if __name__ == "__main__":
-  
   import unittest
   class testCmsRun(unittest.TestCase):
     def testFiltering(self):
