@@ -12,6 +12,7 @@
 
 // system include files
 #include <mutex>
+#include <Python.h>
 
 // user include files
 #include "FWCore/PythonFramework/interface/PythonEventProcessor.h"
@@ -66,15 +67,23 @@ PythonEventProcessor::PythonEventProcessor(PythonProcessDesc const& iDesc)
 
 PythonEventProcessor::~PythonEventProcessor()
 {
+   auto gil = PyEval_SaveThread();
    try {
       processor_.endJob();
    }catch(...) {
-      
+
    }
+   PyEval_RestoreThread(gil);
 }
 
 void
 PythonEventProcessor::run()
 {
-   (void) processor_.runToCompletion();
+   auto gil = PyEval_SaveThread();
+   try {
+      (void) processor_.runToCompletion();
+   }catch(...) {
+
+   }
+   PyEval_RestoreThread(gil);
 }
